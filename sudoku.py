@@ -16,57 +16,90 @@ frames = []
 for i in range (9):
     frames.append(tk.Frame(puzzle, highlightbackground='light blue', highlightcolor='light blue', highlightthickness=1))
     frames[i].grid(row = i // 3, column = i % 3, sticky='nsew')
+
 bt=[[Button() for _ in range(9)] for _ in range(9)]
 cnt = [1]
 pre = [None]
+
 def on_click(i, j, b):
     color = ['yellow', 'white']
     color2 = ['#0047ab', 'gray']
-    if pre[0] != b and b['bg'] != 'white' and b['bg'] != 'yellow':
+    color3 = ['green', 'white']
+    if pre[0] != b and b['bg'] not in ('yellow', 'white'):
         cnt[0] ^= 1
-    if (b['bg'] in color2):
-        for k in range(0, 9):
-            for l in range(0, 9):
-                if(bt[k][l]['bg'] == 'yellow'):
-                    bt[k][l].config(bg = 'white')
-                if (bt[k][l]['bg'] in color2):
-                    bt[k][l].config(bg = 'gray')
-        fr = str(b.master)[-1]
-        for k in range(0, 9):
-            for l in range(0, 9):
-                if (bt[k][l]['text'] == b['text'] and bt[k][l]['bg'] == 'gray'):
-                    bt[k][l].config(bg = color2[cnt[0]])
+    if pre[0] != None and pre[0] != b and pre[0]['bg'] == 'green':
+        cnt[0] ^= 1
+    if b['bg'] in color2:
+        for k in range(9):
+            for l in range(9):
+                if bt[k][l]['bg'] in color or bt[k][l]['bg'] in color3:
+                    bt[k][l].config(bg='white')
+                if bt[k][l]['bg'] in color2:
+                    bt[k][l].config(bg='gray')
+        for k in range(9):
+            for l in range(9):
+                if bt[k][l]['text'] == b['text'] and bt[k][l]['bg'] == 'gray':
+                    bt[k][l].config(bg=color2[cnt[0]])
                 if (k == i and l == j) or bt[k][l]['bg'] in color2:
                     continue
-                if (k == i or l == j):
-                    bt[k][l].config(bg = color[cnt[0]])
-    elif b['bg'] == 'white' or b['bg'] == 'yellow':
-        if (b['text'] == ''):
-            b.config(text = '1')
-        elif (b['text'] != '9'):
-            b.config(text = str(int(b['text']) + 1))
-        else:
-            b.config(text = '')
+                if k == i or l == j:
+                    bt[k][l].config(bg=color[cnt[0]])
+        cnt[0] ^= 1
+        pre[0] = b
         return
-    elif b['bg'] == 'red':
-        b.config(bg = 'white', text = '')
-    cnt[0] ^= 1     
+    if b['bg'] in ('white', 'yellow', 'green'):
+        check_ = False
+        for k in range(9):
+            for l in range(9):
+                if bt[k][l]['bg'] in ('green', 'yellow'):
+                    check_ = True
+                if bt[k][l]['bg'] in color or bt[k][l]['bg'] in color3:
+                    bt[k][l].config(bg='white')
+                if bt[k][l]['bg'] in color2:
+                    bt[k][l].config(bg='gray')
+        if b['text'] == '' or b['bg'] == 'white':
+            b.config(bg=color3[cnt[0] ^ 1])
+        cnt[0] ^= 1
+        pre[0] = b
+        return
+
+    if b['bg'] == 'red':
+        b.config(bg='white', text='')
+        cnt[0] ^= 1
+        pre[0] = b
+        return
+
+    cnt[0] ^= 1
     pre[0] = b
-    return
+
 
 for i in range(0, 9):
     for j in range(0, 9):
-        idx = i // 3 * 3 + j // 3
         bt[i][j] = Button(frames[i // 3 * 3 + j // 3], width=6, height=3, command=lambda i=i, j=j: on_click(i, j, bt[i][j]))
         bt[i][j].grid(row = i % 3,column = j % 3)
-er=Label(root,width=12,height=0,font=fts)
-er.pack()
-er.config(text="ERROR: 0")
 
+def get_key(k):
+    cnt[0] = 1
+    for i in range(9):
+        for j in range(9):
+            if(bt[i][j]['bg'] == 'green'):
+                if (k['text'] != 'DEL'):
+                    bt[i][j].config(text = k['text'], bg = 'white')
+                else:
+                    bt[i][j].config(text = '', bg = 'white')
+
+frame_key = tk.Frame(root)
+frame_key.pack(pady = 60)
+keyboards = [None] + [Button() for _ in range(10)]
+for i in range(1, 10):
+    keyboards[i] = Button(frame_key, width=6, height=3, text=str(i), command=lambda i=i: get_key(keyboards[i]))
+    keyboards[i].grid(row = 0, column = i - 1)
+keyboards[i] = Button(frame_key, width=6, height=3, text='DEL', command=lambda i=i: get_key(keyboards[i]))
+keyboards[i].grid(row = 0, column = 9)
 def generator():
     global solution,sudoku1,error
-    cnt = [1]
-    pre = [None]
+    cnt[0] = 1
+    pre[0] = None
     er.config(text="ERROR: 0")
     error=0
     temp=[[0 for i in range(9)] for j in range(9)]
@@ -134,11 +167,17 @@ def check():
             for j in range(9):
                 bt[i][j].config(state=DISABLED)
         messagebox.showinfo("END","Win")
-btreset=Button(root,text="reset",width=8, height=5, command = generator)
-btreset.pack(side=LEFT)
 
-btcheck=Button(root,text="check",width=8, height=5, command = check)
-btcheck.pack(side=RIGHT)
+conf_frame = tk.Frame(root)
+conf_frame.pack(pady=0)
+er=Label(conf_frame,width=12,height=0,font=fts)
+er.grid(row=0, column=15)
+er.config(text="ERROR: 0")
+btreset=Button(conf_frame,text="reset",width=8, height=5, command = generator)
+btreset.grid(row=0, column=0)
+
+btcheck=Button(conf_frame, text="check",width=8, height=5, command = check)
+btcheck.grid(row=0, column=30)
 
 generator()
 
