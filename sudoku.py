@@ -17,7 +17,7 @@ for i in range (9):
     frames.append(tk.Frame(puzzle, highlightbackground='light blue', highlightcolor='light blue', highlightthickness=1))
     frames[i].grid(row = i // 3, column = i % 3, sticky='nsew')
 
-bt=[[Button() for _ in range(9)] for _ in range(9)]
+bt = [[Button() for _ in range(9)] for _ in range(9)]
 cnt = [1]
 pre = [None]
 
@@ -62,13 +62,11 @@ def on_click(i, j, b):
         cnt[0] ^= 1
         pre[0] = b
         return
-
     if b['bg'] == 'red':
         b.config(bg='white', text='')
         cnt[0] ^= 1
         pre[0] = b
         return
-
     cnt[0] ^= 1
     pre[0] = b
 
@@ -80,6 +78,7 @@ for i in range(0, 9):
 
 def get_key(k):
     cnt[0] = 1
+    print(k['text'])
     for i in range(9):
         for j in range(9):
             if(bt[i][j]['bg'] == 'green'):
@@ -90,12 +89,13 @@ def get_key(k):
 
 frame_key = tk.Frame(root)
 frame_key.pack(pady = 30)
-keyboards = [None] + [Button() for _ in range(10)]
-for i in range(1, 10):
-    keyboards[i] = Button(frame_key, width=6, height=3, text=str(i), command=lambda i=i: get_key(keyboards[i]))
-    keyboards[i].grid(row = 0, column = i - 1)
-keyboards[i] = Button(frame_key, width=6, height=3, text='DEL', command=lambda i=i: get_key(keyboards[i]))
-keyboards[i].grid(row = 0, column = 9)
+keyboards = [Button() for _ in range(10)]
+for i in range(9):
+    keyboards[i] = Button(frame_key, width=6, height=3, text=str(i + 1), command=lambda i=i: get_key(keyboards[i]))
+    keyboards[i].grid(row = 0, column = i)
+keyboards[9] = Button(frame_key, width=6, height=3, text='DEL', command=lambda: get_key(keyboards[9]))
+keyboards[9].grid(row = 0, column = 10)
+
 def generator():
     global solution,sudoku1,error
     cnt[0] = 1
@@ -122,7 +122,8 @@ def generator():
     temp1 = Sudoku.from_list(temp,box_size=BoxSize(3, 3),)
     temp2 = solvers.backtrack(temp1)
     solution=np.array(list(str(temp2))).reshape(9,9)
-    print(solution)
+    # print(solution)
+
 def check():
     color2 = ['#0047ab', 'gray']
     for k in range(0, 9):
@@ -175,10 +176,8 @@ er.grid(row=0, column=15)
 er.config(text="ERROR: 0")
 btreset=Button(conf_frame,text="reset",width=10, height=5, command = generator)
 btreset.grid(row=0, column=0)
-
 btcheck=Button(conf_frame, text="check",width=10, height=5, command = check)
 btcheck.grid(row=0, column=30)
 
 generator()
-
 root.mainloop()
