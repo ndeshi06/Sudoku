@@ -89,7 +89,7 @@ def get_key(k):
                     bt[i][j].config(text = '', bg = 'white')
 
 frame_key = tk.Frame(root)
-frame_key.pack(pady = 60)
+frame_key.pack(pady = 30)
 keyboards = [None] + [Button() for _ in range(10)]
 for i in range(1, 10):
     keyboards[i] = Button(frame_key, width=6, height=3, text=str(i), command=lambda i=i: get_key(keyboards[i]))
@@ -173,10 +173,10 @@ conf_frame.pack(pady=0)
 er=Label(conf_frame,width=12,height=0,font=fts)
 er.grid(row=0, column=15)
 er.config(text="ERROR: 0")
-btreset=Button(conf_frame,text="reset",width=8, height=5, command = generator)
+btreset=Button(conf_frame,text="reset",width=10, height=5, command = generator)
 btreset.grid(row=0, column=0)
 
-btcheck=Button(conf_frame, text="check",width=8, height=5, command = check)
+btcheck=Button(conf_frame, text="check",width=10, height=5, command = check)
 btcheck.grid(row=0, column=30)
 
 generator()
