@@ -73,7 +73,7 @@ def on_click(i, j, b):
 
 for i in range(0, 9):
     for j in range(0, 9):
-        bt[i][j] = Button(frames[i // 3 * 3 + j // 3], width=6, height=3, command=lambda i=i, j=j: on_click(i, j, bt[i][j]))
+        bt[i][j] = Button(frames[i // 3 * 3 + j // 3], width=7, height=3, command=lambda i=i, j=j: on_click(i, j, bt[i][j]))
         bt[i][j].grid(row = i % 3,column = j % 3)
 
 def get_key(k):
@@ -91,10 +91,14 @@ frame_key = tk.Frame(root)
 frame_key.pack(pady = 30)
 keyboards = [Button() for _ in range(10)]
 for i in range(9):
-    keyboards[i] = Button(frame_key, width=6, height=3, text=str(i + 1), command=lambda i=i: get_key(keyboards[i]))
+    keyboards[i] = Button(frame_key, width=8, height=3, text=str(i + 1), bg="#299fca", command=lambda i=i: get_key(keyboards[i]))
     keyboards[i].grid(row = 0, column = i)
-keyboards[9] = Button(frame_key, width=6, height=3, text='DEL', command=lambda: get_key(keyboards[9]))
+keyboards[9] = Button(frame_key, width=10, height=3, text='DEL', bg="black", fg='white', command=lambda: get_key(keyboards[9]))
+keyboards[0].grid(row = 0, column = 0)
+keyboards[0].grid_configure(padx=(30, 0))
 keyboards[9].grid(row = 0, column = 10)
+keyboards[9].grid_configure(padx=(30, 20))
+
 
 def generator():
     global solution,sudoku1,error
@@ -172,12 +176,12 @@ def check():
 conf_frame = tk.Frame(root)
 conf_frame.pack(pady=0)
 er=Label(conf_frame,width=12,height=0,font=fts)
-er.grid(row=0, column=15)
+er.grid(row=0, column=1, padx=50)
 er.config(text="ERROR: 0")
-btreset=Button(conf_frame,text="reset",width=10, height=5, command = generator)
-btreset.grid(row=0, column=0)
-btcheck=Button(conf_frame, text="check",width=10, height=5, command = check)
-btcheck.grid(row=0, column=30)
+btreset=Button(conf_frame,text="reset",width=15, height=5, command = generator)
+btreset.grid(row=0, column=0, padx=50)
+btcheck=Button(conf_frame, text="check",width=15, height=5, command = check)
+btcheck.grid(row=0, column=2, padx=50)
 
 generator()
 root.mainloop()
