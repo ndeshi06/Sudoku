@@ -22,7 +22,7 @@ pre = [None]
 def on_click(i, j, b):
     color = ['yellow', 'white']
     color2 = ['#0047ab', 'gray']
-    if pre[0] != b:
+    if pre[0] != b and b['bg'] != 'white' and b['bg'] != 'yellow':
         cnt[0] ^= 1
     if (b['bg'] in color2):
         for k in range(0, 9):
@@ -47,6 +47,7 @@ def on_click(i, j, b):
             b.config(text = str(int(b['text']) + 1))
         else:
             b.config(text = '')
+        return
     elif b['bg'] == 'red':
         b.config(bg = 'white', text = '')
     cnt[0] ^= 1     
