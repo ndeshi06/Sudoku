@@ -126,7 +126,7 @@ def generator():
     temp1 = Sudoku.from_list(temp,box_size=BoxSize(3, 3),)
     temp2 = solvers.backtrack(temp1)
     solution=np.array(list(str(temp2))).reshape(9,9)
-    # print(solution)
+    print(solution)
 
 def check():
     color2 = ['#0047ab', 'gray']
@@ -143,8 +143,6 @@ def check():
     for i in range(9):
         for j in range(9):
             temp = bt[i][j]['text']
-            if temp in so:  
-                demso[int(temp)-1]+=1 
             if temp!="" and temp!=sudoku1[i][j]:
                 if temp != solution[i][j]:
                     if bt[i][j]["bg"] != "red":
@@ -157,10 +155,12 @@ def check():
             if temp=="": bt[i][j].config(bg="white")
     for i in range(9):
         for j in range(9):
-            if demso[j]==9:
-                if bt[i][j]["text"] == str(j+1):
-                    bt[i][j].config(state=NORMAL)
-                    bt[i][j].config(bg="gray")
+            temp = bt[i][j]['text']
+            if (bt[i][j]['bg'] == 'gray'):
+                demso[int(temp)-1] += 1
+    for i in range(9):
+        if demso[i]==9:
+            keyboards[i].config(bg='gray', state=DISABLED)
     if error==3:
         for i in range(9):
             for j in range(9):
