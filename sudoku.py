@@ -64,6 +64,8 @@ er.config(text="ERROR: 0")
 
 def generator():
     global solution,sudoku1,error
+    cnt = [1]
+    pre = [None]
     er.config(text="ERROR: 0")
     error=0
     temp=[[0 for i in range(9)] for j in range(9)]
