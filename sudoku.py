@@ -17,10 +17,13 @@ for i in range (9):
     frames.append(tk.Frame(puzzle, highlightbackground='light blue', highlightcolor='light blue', highlightthickness=1))
     frames[i].grid(row = i // 3, column = i % 3, sticky='nsew')
 bt=[[Button() for _ in range(9)] for _ in range(9)]
-
-def on_click(i, j, b, cnt):
+cnt = [1]
+pre = [None]
+def on_click(i, j, b):
     color = ['yellow', 'white']
     color2 = ['#0047ab', 'gray']
+    if pre[0] != b:
+        cnt[0] ^= 1
     if (b['bg'] in color2):
         for k in range(0, 9):
             for l in range(0, 9):
@@ -31,7 +34,7 @@ def on_click(i, j, b, cnt):
         fr = str(b.master)[-1]
         for k in range(0, 9):
             for l in range(0, 9):
-                if (bt[k][l]['text'] == b['text']):
+                if (bt[k][l]['text'] == b['text'] and bt[k][l]['bg'] == 'gray'):
                     bt[k][l].config(bg = color2[cnt[0]])
                 if (k == i and l == j) or bt[k][l]['bg'] in color2:
                     continue
@@ -47,12 +50,13 @@ def on_click(i, j, b, cnt):
     elif b['bg'] == 'red':
         b.config(bg = 'white', text = '')
     cnt[0] ^= 1     
+    pre[0] = b
     return
 
 for i in range(0, 9):
     for j in range(0, 9):
         idx = i // 3 * 3 + j // 3
-        bt[i][j] = Button(frames[i // 3 * 3 + j // 3], width=6, height=3, command=lambda i=i, j=j, cnt = [0]: on_click(i, j, bt[i][j], cnt))
+        bt[i][j] = Button(frames[i // 3 * 3 + j // 3], width=6, height=3, command=lambda i=i, j=j: on_click(i, j, bt[i][j]))
         bt[i][j].grid(row = i % 3,column = j % 3)
 er=Label(root,width=12,height=0,font=fts)
 er.pack()
