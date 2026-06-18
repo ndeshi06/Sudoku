@@ -78,6 +78,7 @@ for i in range(0, 9):
 
 def get_key(k):
     cnt[0] = 1
+    pre[0] = None
     print(k['text'])
     for i in range(9):
         for j in range(9):
@@ -130,6 +131,7 @@ def generator():
 
 def check():
     cnt[0] = 1
+    pre[0] = None
     color2 = ['#0047ab', 'gray']
     for k in range(0, 9):
         for l in range(0, 9):
