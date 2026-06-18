@@ -14,7 +14,7 @@ puzzle.pack()
 
 frames = []
 for i in range (9):
-    frames.append(tk.Frame(puzzle, highlightbackground='light blue', highlightcolor='light blue', highlightthickness=1))
+    frames.append(tk.Frame(puzzle, highlightbackground="#000000", highlightcolor="#000000", highlightthickness=3))
     frames[i].grid(row = i // 3, column = i % 3, sticky='nsew')
 
 bt = [[Button() for _ in range(9)] for _ in range(9)]
