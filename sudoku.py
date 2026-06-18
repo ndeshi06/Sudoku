@@ -129,6 +129,7 @@ def generator():
     print(solution)
 
 def check():
+    cnt[0] = 1
     color2 = ['#0047ab', 'gray']
     for k in range(0, 9):
         for l in range(0, 9):
